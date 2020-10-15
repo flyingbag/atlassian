@@ -42,6 +42,8 @@ services:
     volumes:
       - /app/atlassian/application-data/bitbucket:/var/atlassian/application-data/bitbucket
       - /app/atlassian/docker/certs/cacerts:/opt/java/openjdk/jre/lib/security/cacerts
+    ports:
+      - 7999:7999
     depends_on:
       - bitbucketdb
 
@@ -91,7 +93,7 @@ services:
       - confluence
       - bitbucket
     ports:
-      - "80:80"
+      - 80:80
     networks:
       default:
         aliases:
