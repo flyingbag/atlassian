@@ -11,6 +11,9 @@ services:
       - jiradb
     volumes:
       - /app/atlassian/application-data/jira:/var/atlassian/application-data/jira
+      - /app/atlassian/docker/certs/cacerts:/opt/java/openjdk/jre/lib/security/cacerts
+    depends_on:
+      - jiradb
 
   confluence:
     container_name: confluence
@@ -23,6 +26,9 @@ services:
       - confluencedb
     volumes:
       - /app/atlassian/application-data/confluence:/var/atlassian/application-data/confluence
+      - /app/atlassian/docker/certs/cacerts:/opt/java/openjdk/jre/lib/security/cacerts
+    depends_on:
+      - confluencedb
 
   bitbucket:
     container_name: bitbucket
@@ -35,6 +41,9 @@ services:
       - bitbucketdb
     volumes:
       - /app/atlassian/application-data/bitbucket:/var/atlassian/application-data/bitbucket
+      - /app/atlassian/docker/certs/cacerts:/opt/java/openjdk/jre/lib/security/cacerts
+    depends_on:
+      - bitbucketdb
 
   jiradb:
     image: postgres:9.4
@@ -46,6 +55,7 @@ services:
       - POSTGRES_DB=${JIRA_DB_NAME}
       - POSTGRES_USER=${JIRA_DB_USER}
       - POSTGRES_PASSWORD=${JIRA_DB_PASSWORD}
+    stop_grace_period: ${STOP_GRACE_PERIOD}
 
   confluencedb:
     image: postgres:9.4
@@ -57,6 +67,7 @@ services:
       - POSTGRES_DB=${CONFLUENCE_DB_NAME}
       - POSTGRES_USER=${CONFLUENCE_DB_USER}
       - POSTGRES_PASSWORD=${CONFLUENCE_DB_PASSWORD}
+    stop_grace_period: ${STOP_GRACE_PERIOD}
 
   bitbucketdb:
     image: postgres:9.4
@@ -68,6 +79,7 @@ services:
       - POSTGRES_DB=${BITBUCKET_DB_NAME}
       - POSTGRES_USER=${BITBUCKET_DB_USER}
       - POSTGRES_PASSWORD=${BITBUCKET_DB_PASSWORD}
+    stop_grace_period: ${STOP_GRACE_PERIOD}
 
   nginx:
     container_name: nginx
@@ -86,3 +98,4 @@ services:
           - ${JIRA_PROXY_NAME}
           - ${CONFLUENCE_PROXY_NAME}
           - ${BITBUCKET_PROXY_NAME}
+    stop_grace_period: ${STOP_GRACE_PERIOD}
